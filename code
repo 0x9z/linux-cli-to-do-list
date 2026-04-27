@@ -1,0 +1,73 @@
+#!/bin/bash
+# =================================================
+# Simple To-Do List Manager (CLI)
+# ===============================================
+# Author: 0x9z
+# Description:
+#   A lightweight task manager that stores tasks in invoices.log
+#   with automatic ID and timestamp generation.
+# Usage:
+#   ./tasks.sh
+# ==============================================
+
+while true; do
+
+#variables section :
+
+	id=$(cat /dev/urandom | tr -dc '0-9' | head -c 9)
+	thedate=$(date | cut -d " " -f 1,2,3,4,5,7)
+
+
+#code section :
+
+	clear
+	echo "====================================="
+	echo "     Welcome to To-Do Manager"
+	echo "     $(date | cut -d " " -f 1,2,3,4)"
+	echo "====================================="
+	sleep 0.1
+	echo -e "\n1) add new task\n2) see the tasks list\n3) delete your task list\n4) Quit\n"
+	read -p "choose from (1-4) ----> " userchoice
+#choice number 1 :		
+	if [ "$userchoice" -eq 1 ]; then
+	      echo ""
+              read -p "---> Adding a new task : " task
+              if [ -n "$task" ]; then
+                       echo -e "loading...\n"
+                       echo -e "task added successfully at $thedate, task ID : $id\n"
+                       echo -e "[ $thedate ] [ID: $id ] - $task " >> invoices.log
+                       echo -e "task saved successfully"
+               else
+                       echo "tasks section cant be empty!"
+               fi
+	elif [ "$userchoice" -eq 2 ]; then
+		if [ -s invoices.log ]; then
+	  		cat invoices.log
+			echo ""
+			read -p "Click enter to continue..."
+		else 
+			echo "no tasks found. add a task first!"
+		fi
+	
+	elif [ "$userchoice" -eq 3 ]; then
+		> invoices.log #this clearing the log file content
+		echo "your tasks list has been deleted!"		
+	
+	elif [ "$userchoice" -eq 4 ]; then
+		echo "goodbye!"
+		break
+	else 
+		echo "Please make sure to choose between (1 - 4) ---- > "
+
+	fi
+
+	
+	echo ""	
+	clear
+	echo -e "\nLoading To-Do Manager..."
+	sleep 1
+	clear
+	sleep 0.1
+
+done
+
